@@ -7,5 +7,5 @@
 该项目主要是一些技术的学习笔记，方便阅读及复习。
 
 ### 笔记目录
-- [**wechat-pay**：微信支付相关参考](https://github.com/killahs/killah-plus-full/tree/main/wechat-pay)
-- [**sharding-sphere**：分库分表相关参考](https://github.com/killahs/killah-plus-full/tree/main/sharding-sphere)
+- [**JAVA 基础**](https://github.com/killahs/killah-note/tree/main/wechat-pay)
+- [**sharding-sphere](https://github.com/killahs/killah-note/tree/main/sharding-sphere)
