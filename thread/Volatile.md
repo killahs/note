@@ -6,13 +6,9 @@
 
 ## 2. 谈谈 JMM
 ### 2.1. 概念：
-JMM（Java内存模型 Java Memory Model）本身是一种抽象的概念并不真实存在，它描 述的是一组规则或规范，通过这种规范定义了程序中各个变量（包括实例字段，静态字段和 构成数组对象的元素）的访问方式。
+JMM（Java 内存模型 Java Memory Model）本身是一种抽象的概念并不真实存在，它描述的是一组规则或规范，通过这种规范定义了程序中各个变量（包括实例字段，静态字段和 构成数组对象的元素）的访问方式。
 
-**JMM三大特性**：
-- 可见性
-- 原子性
-- 有序性
-
+**JMM三大特性**： 可见性、 原子性、有序性
 
 ### 2.2. JMM 关于同步的规定：
 - 线程解锁前，必须把共享变量的值刷新回主内存。
@@ -51,7 +47,7 @@ JMM（Java内存模型 Java Memory Model）本身是一种抽象的概念并不�
 ### 3.2. 怎么解决原子性？
 1. 加synchronized;
 2. number ++ 在多线程下是非线程安全的，如果不加 synchronized解决？
-```
+```java
 //通过原子类进行解决：AtomicInteger 带原子性的 Integer。(JUC) 代替 number ++。
 AtomicInteger i = new AtomicInteger();
 ```
@@ -71,7 +67,7 @@ AtomicInteger i = new AtomicInteger();
 
 
 **重排案例一：**
-```
+```java
 public void my sort(){
     int x = 11;     //语句1
     int y = 12;     //语句2
@@ -89,7 +85,7 @@ public void my sort(){
 ```
 
 **重排案例二：**
-```
+```java
 public class Demo{
     int a = 0;
     boolean flag = false;
@@ -133,7 +129,7 @@ public class Demo{
 
 ## 5. 单例模式Volatile
 **DCL模式（Double Check Lock 双端检锁模式）**：加锁并两次检测
-```
+```java
 public class Singleton{ 
     private static Singleton INSTANCE = null;
     
@@ -160,16 +156,16 @@ DCL（双端检锁）机制不一定线程安全，原因是有指令重排序�
 原因在于：某一线程执行到第一次检测，读到 INSTANCE 不为 null 时，==INSTANCE 的引用对象可能没有完成初始化==。
 
 **原因如下：**
-```
+```java
 INSTANCE  = new Singleton();    // 可以分为以下3步完成（伪代码）
 memory = allocate(); 	        // 1. 分配对象内存空间。
-instance(memory);		        // 2. 初始化对象。
-instance= memory;		        // 3. 设置INSTANCE 指向 刚分配的内存地址，此时 instance !=  null。
+instance(memory);               // 2. 初始化对象。
+instance= memory;               // 3. 设置INSTANCE 指向 刚分配的内存地址，此时 instance !=  null。
 ```
 
 步骤2和步骤3**不存在数据依赖关系**，而且**无论重排前还是重排后程序执行结果在单线程中并没有改变**，因此这种重排优化是允许的。
 
-```
+```java
 memory = allocate();            // 1. 分配对象内存空间。
 instance= memory;               // 3. 设置INSTANCE 指向 刚分配的内存地址，此时 instance !=  null，但是对象还未初始化完成！
 instance(memory);               // 2.初始化对象。
@@ -180,6 +176,6 @@ instance(memory);               // 2.初始化对象。
 **所以当其中一条线程访问 INSTANCE 不为 null 时，由于INSTANCE 实例还未初始化完成，也就造成了线程安全问题。
 可以给代码加vlatile 禁止指令重排。**
 
-```
+```java
 private static volatile Singleton INSTANCE = null;
 ```
